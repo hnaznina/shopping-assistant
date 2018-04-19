@@ -16,7 +16,7 @@
 <ion-content padding>
   <ion-fab top left edge>
     <ion-item id="inpbox">
-      <ion-input placeholder="Item name e.g: Apple" [(ngModel)]="itemName" clearInput></ion-input>
+      <ion-input placeholder="Item name e.g: Apple" [(ngModel)]="item.itemName" clearInput></ion-input>
     </ion-item>
   </ion-fab>
   <ion-fab top right edge>
@@ -27,8 +27,8 @@
   
   <ion-list id="itemList">
     <ion-item *ngFor="let item of items; let i=index">
-        <ion-checkbox>{{item.itemName}}</ion-checkbox> 
-        
+        <!-- <ion-checkbox>{{item.itemName}}</ion-checkbox>  -->
+        {{item.itemName}}
     </ion-item>
   </ion-list>
 

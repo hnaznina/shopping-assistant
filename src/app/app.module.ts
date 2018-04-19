@@ -13,6 +13,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 
+//Database provider
+import { IonicStorageModule } from '@ionic/storage';
+import { HttpModule } from '@angular/http';
+import { DatabaseProvider } from '../providers/database/database';
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -22,6 +28,8 @@ import { Toast } from '@ionic-native/toast';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -36,7 +44,9 @@ import { Toast } from '@ionic-native/toast';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     SQLite,
-    Toast
+    Toast,
+    DatabaseProvider,
+    SQLitePorter,
   ]
 })
 export class AppModule { }
