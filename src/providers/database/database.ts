@@ -6,14 +6,15 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/Rx';
 import { Storage } from '@ionic/storage';
- 
+
 @Injectable()
 export class DatabaseProvider {
-  private databaseVer: number = 2;
+  private databaseVer: number = 1;
   database: SQLiteObject;
   private databaseReady: BehaviorSubject<boolean>;
- 
-  constructor(public sqlitePorter: SQLitePorter, private storage: Storage, private sqlite: SQLite, private platform: Platform, private http: Http) {
+
+  constructor(public sqlitePorter: SQLitePorter, private storage: Storage, 
+    private sqlite: SQLite, private platform: Platform, private http: Http) {
     this.databaseReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
       this.sqlite.create({
@@ -25,7 +26,7 @@ export class DatabaseProvider {
           this.storage.get('database_ver').then(ver => {
             if (this.databaseVer != ver) {
               this.dropAllDbTables();
-            } 
+            }
           });
 
           this.storage.get('database_filled').then(val => {
@@ -39,7 +40,7 @@ export class DatabaseProvider {
     });
   }
 
-  dropAllDbTables(){
+  dropAllDbTables() {
     this.http.get('assets/sql/dropTables.sql').map(res => res.text())
       .subscribe(sql => {
         this.sqlitePorter.importSqlToDb(this.database, sql)
@@ -49,7 +50,7 @@ export class DatabaseProvider {
           .catch(e => console.error(e));
       });
   }
- 
+
   fillDatabase() {
     this.http.get('assets/sql/dummyDump.sql').map(res => res.text())
       .subscribe(sql => {
@@ -66,20 +67,40 @@ export class DatabaseProvider {
   getDatabaseState() {
     return this.databaseReady.asObservable();
   }
- 
+
 
   // Item DAO 
   addItem(itemName, selectFlag) {
     let data = [itemName, selectFlag];
-    return this.database.executeSql('INSERT INTO item (itemName,selectFlag) VALUES(?,?)',[itemName, selectFlag]).then(data => {
+    return this.database.executeSql('INSERT INTO item (itemName,selectFlag) VALUES(?,?)', [itemName, selectFlag]).then(data => {
       return data;
     }, err => {
       console.log('Error: ', err);
       return err;
     });
   }
- 
+
+  removeItem(itemId) {
+    this.database.executeSql('DELETE FROM item WHERE itemId=?', [itemId]).then(data => {
+      //console.log(data);
+    }, err => {
+      console.log('Error: ', err);
+    });
+  }
+
+  updateItem(itemNamedb,itemName){
+    
+    this.database.executeSql('UPDATE item SET itemName=? WHERE itemName=?', [itemName, itemNamedb]).then(data => {
+    
+    }, err => {
+      console.log('Error: ', err);
+    });
+
+
+  }
+
   getAllItems() {
+
     return this.database.executeSql("SELECT * FROM item", []).then((res) => {
       let items = [];
       if (res.rows.length > 0) {
@@ -93,9 +114,35 @@ export class DatabaseProvider {
       return [];
     });
   }
- 
+
 
   //Mart DAO
-  
- 
+
+
+
+  getAllMarts() {
+    let allMarts = [];
+    return this.database.executeSql("SELECT * FROM mart", []).then((res) => {
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          allMarts.push({ martId: res.rows.item(i).martId, martName: res.rows.item(i).martName});
+        }
+      }
+      return allMarts;
+    }, err => {
+      console.log('Error: ', err);
+      return [];
+    });
+  }
+
+  addMart(martName){
+
+    return this.database.executeSql('INSERT INTO mart (martName) VALUES(?)', [martName]).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+      return err;
+    });
+
+  }
 }

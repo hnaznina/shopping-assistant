@@ -4,7 +4,7 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
+<!-- <ion-header>
 
   <ion-navbar>
     <ion-title>mart</ion-title>
@@ -14,5 +14,34 @@
 
 
 <ion-content padding>
+    <ion-fab top left edge>
+        <ion-item id="inpbox">
+          <ion-input placeholder="Mart name e.g: Target" [(ngModel)]="mart.martName" clearInput></ion-input>
+        </ion-item>
+      </ion-fab>
+      <ion-fab top right edge>
+        <button ion-fab mini id="btn" (click)="addMart()">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-fab>
 
-</ion-content>
+
+      <ion-list>
+          <ion-item-sliding *ngFor="let mart of marts; let i = index">
+            
+            <ion-item (click)="">
+              <ion-label >{{mart.martName}}</ion-label>
+              <ion-checkbox [(ngModel)]="mart.martId" ></ion-checkbox>
+            </ion-item>
+      
+            <ion-item-options>
+              <button ion-button expandable (click)="removeMart(mart.martId)" id="deleteButton"><b>Delete</b></button>
+              <button ion-button expandable (click)="MartEdit(mart.martName)" id="editButton"><b>Edit</b></button>
+              
+            </ion-item-options>
+          </ion-item-sliding>
+      
+          
+        </ion-list>
+
+</ion-content> -->

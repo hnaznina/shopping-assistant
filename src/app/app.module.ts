@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { ItemPage } from '../pages/item/item';
+import { MartPage } from '../pages/mart/mart';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -24,7 +25,8 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
     MyApp,
     HomePage,
     ListPage,
-    ItemPage
+    ItemPage,
+    MartPage
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
     MyApp,
     HomePage,
     ListPage,
-    ItemPage
+    ItemPage,
+    MartPage
   ],
   providers: [
     StatusBar,
