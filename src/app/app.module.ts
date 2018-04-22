@@ -8,6 +8,10 @@ import { ListPage } from '../pages/list/list';
 import { ItemPage } from '../pages/item/item';
 import { MartPage } from '../pages/mart/mart';
 
+
+import { ItemSearchPipe } from '../pipes/item-search/item-search';
+
+
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -26,7 +30,8 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
     HomePage,
     ListPage,
     ItemPage,
-    MartPage
+    MartPage,
+    ItemSearchPipe
   ],
   imports: [
     BrowserModule,

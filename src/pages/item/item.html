@@ -14,22 +14,35 @@
 
 
 <ion-content padding>
-  <ion-fab top left edge>
-    <ion-item id="inpbox">
-      <ion-input placeholder="Item name e.g: Apple" [(ngModel)]="item.itemName" clearInput></ion-input>
-    </ion-item>
-  </ion-fab>
-  <ion-fab top right edge>
-    <button ion-fab mini id="btn" (click)="addItem()">
+
+  <ion-searchbar [(ngModel)]="itemSearchInput"></ion-searchbar>
+
+  <ion-fab bottom right edge>
+    <button ion-fab mini id="addItemButton" (click)="addItem()">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>
-  
-  <ion-list id="itemList">
-    <ion-item *ngFor="let item of items; let i=index">
-        <!-- <ion-checkbox>{{item.itemName}}</ion-checkbox>  -->
-        {{item.itemName}}
-    </ion-item>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of items | itemSearchPipe : itemSearchInput; let i = index">
+
+      <ion-item>
+        <ion-label>{{item.itemName}}</ion-label>
+        <ion-checkbox [(ngModel)]="item.itemId"></ion-checkbox>
+      </ion-item>
+
+      <ion-item-options>
+        <button ion-button expandable (click)="removeItem(item.itemId)" id="deleteButton">
+          <b>Delete</b>
+        </button>
+        <button ion-button expandable (click)="openItemModal(item)" id="editButton">
+          <b>Edit</b>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+
   </ion-list>
+
 
 </ion-content>

@@ -9,11 +9,11 @@ import { Storage } from '@ionic/storage';
 
 @Injectable()
 export class DatabaseProvider {
-  private databaseVer: number = 1;
+  private databaseVer: number = 6;
   database: SQLiteObject;
   private databaseReady: BehaviorSubject<boolean>;
 
-  constructor(public sqlitePorter: SQLitePorter, private storage: Storage, 
+  constructor(public sqlitePorter: SQLitePorter, private storage: Storage,
     private sqlite: SQLite, private platform: Platform, private http: Http) {
     this.databaseReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
@@ -69,7 +69,7 @@ export class DatabaseProvider {
   }
 
 
-  // Item DAO 
+  // Item DAO
   addItem(itemName, selectFlag) {
     let data = [itemName, selectFlag];
     return this.database.executeSql('INSERT INTO item (itemName,selectFlag) VALUES(?,?)', [itemName, selectFlag]).then(data => {
@@ -82,30 +82,36 @@ export class DatabaseProvider {
 
   removeItem(itemId) {
     this.database.executeSql('DELETE FROM item WHERE itemId=?', [itemId]).then(data => {
-      //console.log(data);
+      return data;
     }, err => {
       console.log('Error: ', err);
     });
   }
 
-  updateItem(itemNamedb,itemName){
-    
-    this.database.executeSql('UPDATE item SET itemName=? WHERE itemName=?', [itemName, itemNamedb]).then(data => {
-    
-    }, err => {
-      console.log('Error: ', err);
-    });
-
-
+  addOrUpdateItem(item): Promise<any> {
+    if (item.itemId != null) {
+      return this.database.executeSql('UPDATE item SET itemName=?, selectFlag=? WHERE itemId=?', [item.itemName, item.selectFlag, item.itemId]).then(data => {
+        return data;
+      },
+        err => {
+          console.log('Error: ', err);
+        });
+    } else {
+      return this.database.executeSql('INSERT INTO item (itemName,selectFlag) VALUES(?,?)', [item.itemName, item.selectFlag]).then(data => {
+        return data;
+      },
+        err => {
+          console.log('Error: ', err);
+        });
+    }
   }
 
   getAllItems() {
-
-    return this.database.executeSql("SELECT * FROM item", []).then((res) => {
+    return this.database.executeSql("SELECT * FROM item", []).then((data) => {
       let items = [];
-      if (res.rows.length > 0) {
-        for (var i = 0; i < res.rows.length; i++) {
-          items.push({ itemId: res.rows.item(i).itemId, itemName: res.rows.item(i).itemName, selectFlag: res.rows.item(i).selectFlag });
+      if (data.rows.length > 0) {
+        for (var i = 0; i < data.rows.length; i++) {
+          items.push({ itemId: data.rows.item(i).itemId, itemName: data.rows.item(i).itemName, selectFlag: data.rows.item(i).selectFlag });
         }
       }
       return items;
@@ -115,17 +121,27 @@ export class DatabaseProvider {
     });
   }
 
+  getItemByName(itemName) {
+    return this.database.executeSql("SELECT * FROM item WHERE itemName = ?", [itemName]).then((data) => {
+      let item = {};
+      if (data.rows.length > 0) {
+        item = { itemId: data.rows.item(0).itemId, itemName: data.rows.item(0).itemName, selectFlag: data.rows.item(0).selectFlag };
+      }
+      return item;
+    }, err => {
+      console.log('Error: ', err);
+      return {};
+    });
+  }
+
 
   //Mart DAO
-
-
-
   getAllMarts() {
     let allMarts = [];
-    return this.database.executeSql("SELECT * FROM mart", []).then((res) => {
-      if (res.rows.length > 0) {
-        for (var i = 0; i < res.rows.length; i++) {
-          allMarts.push({ martId: res.rows.item(i).martId, martName: res.rows.item(i).martName});
+    return this.database.executeSql("SELECT * FROM mart", []).then((data) => {
+      if (data.rows.length > 0) {
+        for (var i = 0; i < data.rows.length; i++) {
+          allMarts.push({ martId: data.rows.item(i).martId, martName: data.rows.item(i).martName, uiSelected: false, dbSelected: false });
         }
       }
       return allMarts;
@@ -135,8 +151,8 @@ export class DatabaseProvider {
     });
   }
 
-  addMart(martName){
 
+  addMart(martName) {
     return this.database.executeSql('INSERT INTO mart (martName) VALUES(?)', [martName]).then(data => {
       return data;
     }, err => {
@@ -144,5 +160,40 @@ export class DatabaseProvider {
       return err;
     });
 
+  }
+
+
+  // ItemMart DAO
+  addItemMart(martId, itemId) {
+    return this.database.executeSql('INSERT INTO itemMart (martId, itemId) VALUES(?,?)', [martId, itemId]).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+      return err;
+    });
+  }
+
+  removeItemMart(martId, itemId) {
+    return this.database.executeSql('DELETE FROM itemMart WHERE martId = ? AND itemId = ?', [martId, itemId]).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+      return err;
+    });
+  }
+
+  getSelectedMartIdsByItemId(itemId) {
+    let martIds = [];
+    return this.database.executeSql("SELECT martId FROM itemMart WHERE itemId = ?", [itemId]).then((data) => {
+      if (data.rows.length > 0) {
+        for (var i = 0; i < data.rows.length; i++) {
+          martIds.push(data.rows.item(i).martId);
+        }
+      }
+      return martIds;
+    }, err => {
+      console.log('Error: ', err);
+      return [];
+    });
   }
 }

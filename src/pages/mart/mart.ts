@@ -18,7 +18,6 @@ import { AlertController } from 'ionic-angular';
   templateUrl: 'mart.html',
 })
 export class MartPage {
-  allMarts:any [];
   martName: any;
   mart = {};
   marts: any = [];
@@ -26,32 +25,26 @@ export class MartPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private sqlite: SQLite, private toast: Toast, private databaseprovider: DatabaseProvider,
     private alertCtrl: AlertController) {
-      this.databaseprovider.getDatabaseState().subscribe(rdy => {
-        if (rdy) {
-          // this.loadMarts();
-        }
-      })
+    this.loadMarts();
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MartPage');
   }
 
-  // loadMarts() {
-  //   this.databaseprovider.getAllMarts().then(data => {
-  //     this.allMarts = data;
-  //   });
-  //   return this.allMarts;
+  loadMarts() {
+    this.databaseprovider.getAllMarts().then(data => {
+      this.marts = data;
+    });
 
-  //   // this.toast.show("Items loaded susscefully", '5000', 'center').subscribe(toast => { console.log(toast); });
-  // }
+    //this.toast.show("Marts loaded susscefully" + this.marts.length, '5000', 'center').subscribe(toast => { console.log(toast); });
+  }
 
-  // addMart() {
-  //   this.databaseprovider.addMart(this.mart['martName'])
-  //     .then(data => {
-  //       this.loadMarts();
-  //     });
-  //   this.mart = {};
-  // }
+  addMart() {
+    this.databaseprovider.addMart(this.mart['martName'])
+      .then(data => {
+        this.loadMarts();
+      });
+    this.mart = {};
+  }
 
 }
