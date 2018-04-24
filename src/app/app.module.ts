@@ -7,16 +7,22 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { ItemPage } from '../pages/item/item';
 import { MartPage } from '../pages/mart/mart';
-
+import { StorePage } from '../pages/store/store';
+import { StoreLocationModalPage } from '../pages/store-location-modal/store-location-modal';
 
 import { ItemSearchPipe } from '../pipes/item-search/item-search';
-
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
+
+//Google Map
+import { AgmCoreModule } from '@agm/core';
+
+//GeoLocation
+import { Geolocation } from '@ionic-native/geolocation';
 
 //Database provider
 import { IonicStorageModule } from '@ionic/storage';
@@ -31,6 +37,8 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
     ListPage,
     ItemPage,
     MartPage,
+    StorePage,
+    StoreLocationModalPage,
     ItemSearchPipe
   ],
   imports: [
@@ -38,6 +46,10 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
     HttpModule,
     IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp),
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyCgCP78arh0qyxLGqBV4G7-aBrCUp72bsc",
+      libraries: ["places"]
+  })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -45,7 +57,9 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
     HomePage,
     ListPage,
     ItemPage,
-    MartPage
+    MartPage,
+    StorePage,
+    StoreLocationModalPage
   ],
   providers: [
     StatusBar,
@@ -55,6 +69,7 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
     Toast,
     DatabaseProvider,
     SQLitePorter,
+    Geolocation
   ]
 })
 export class AppModule { }

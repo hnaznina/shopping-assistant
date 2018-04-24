@@ -7,6 +7,9 @@
 <ion-header>
 
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>item</ion-title>
   </ion-navbar>
 
@@ -23,23 +26,25 @@
     </button>
   </ion-fab>
 
-  <ion-list>
-    <ion-item-sliding *ngFor="let item of items | itemSearchPipe : itemSearchInput; let i = index">
+  <ion-list id="itemList">
+    <ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+      <ion-item-sliding *ngFor="let item of items | itemSearchPipe : itemSearchInput; let i = index">
 
-      <ion-item>
-        <ion-label>{{item.itemName}}</ion-label>
-        <ion-checkbox [(ngModel)]="item.itemId"></ion-checkbox>
-      </ion-item>
+        <ion-item>
+          <ion-label>{{item.itemName}}</ion-label>
+          <ion-checkbox [(ngModel)]="item.itemId"></ion-checkbox>
+        </ion-item>
 
-      <ion-item-options>
-        <button ion-button expandable (click)="removeItem(item.itemId)" id="deleteButton">
-          <b>Delete</b>
-        </button>
-        <button ion-button expandable (click)="openItemModal(item)" id="editButton">
-          <b>Edit</b>
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
+        <ion-item-options>
+          <button ion-button expandable (click)="removeItem(item.itemId)" id="deleteItemButton">
+            <b>Delete</b>
+          </button>
+          <button ion-button expandable (click)="openItemModal(item)" id="editItemButton">
+            <b>Edit</b>
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-item-group>
 
 
   </ion-list>

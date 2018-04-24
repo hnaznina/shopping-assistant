@@ -15,7 +15,7 @@ import { ModalController } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-item',
-  templateUrl: 'item.html',
+  templateUrl: 'item.html'
 })
 export class ItemPage {
   itemName: any;
@@ -42,24 +42,17 @@ export class ItemPage {
       this.items = data;
     });
 
-    //this.toast.show("Items loaded susscefully", '5000', 'center').subscribe(toast => { console.log(toast); });
+    //this.toast.show("Items loaded susscefully", '2000', 'center').subscribe(toast => { console.log(toast); });
   }
-
 
   addItem() {
     this.openItemModal({});
   }
 
-  ionViewDidLoad() {
-  }
-
-  ionViewWillEnter() {
-  }
-
   removeItem(itemId) {
     this.databaseprovider.removeItem(itemId);
     this.loadItems();
-    this.toast.show('remove item' + itemId, '10000', 'center').subscribe();
+    this.toast.show('remove item' + itemId, '2000', 'center').subscribe();
   }
 
   public openItemModal(item) {
@@ -70,6 +63,12 @@ export class ItemPage {
     });
 
     itemModal.present();
+  }
+
+  reorderItems(indexes) {
+    let element = this.items[indexes.from];
+    this.items.splice(indexes.from, 1);
+    this.items.splice(indexes.to, 0, element);
   }
 
 

@@ -9,7 +9,7 @@ import { Storage } from '@ionic/storage';
 
 @Injectable()
 export class DatabaseProvider {
-  private databaseVer: number = 6;
+  private databaseVer: number = 7;
   database: SQLiteObject;
   private databaseReady: BehaviorSubject<boolean>;
 
@@ -111,7 +111,9 @@ export class DatabaseProvider {
       let items = [];
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
-          items.push({ itemId: data.rows.item(i).itemId, itemName: data.rows.item(i).itemName, selectFlag: data.rows.item(i).selectFlag });
+          items.push({ itemId: data.rows.item(i).itemId, 
+            itemName: data.rows.item(i).itemName, 
+            selectFlag: data.rows.item(i).selectFlag });
         }
       }
       return items;
@@ -125,7 +127,9 @@ export class DatabaseProvider {
     return this.database.executeSql("SELECT * FROM item WHERE itemName = ?", [itemName]).then((data) => {
       let item = {};
       if (data.rows.length > 0) {
-        item = { itemId: data.rows.item(0).itemId, itemName: data.rows.item(0).itemName, selectFlag: data.rows.item(0).selectFlag };
+        item = { itemId: data.rows.item(0).itemId, 
+          itemName: data.rows.item(0).itemName, 
+          selectFlag: data.rows.item(0).selectFlag };
       }
       return item;
     }, err => {
@@ -141,7 +145,10 @@ export class DatabaseProvider {
     return this.database.executeSql("SELECT * FROM mart", []).then((data) => {
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
-          allMarts.push({ martId: data.rows.item(i).martId, martName: data.rows.item(i).martName, uiSelected: false, dbSelected: false });
+          allMarts.push({ martId: data.rows.item(i).martId, 
+            martName: data.rows.item(i).martName, 
+            uiSelected: false, 
+            dbSelected: false });
         }
       }
       return allMarts;
@@ -159,7 +166,23 @@ export class DatabaseProvider {
       console.log('Error: ', err);
       return err;
     });
+  }
 
+  removeMart(martId){
+    this.database.executeSql('DELETE FROM mart WHERE martId=?', [martId]).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+    });
+  }
+
+  updateMart(martId, martName) {
+    return this.database.executeSql('UPDATE mart SET martName=? WHERE martId=?', [martName, martId]).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+      return err;
+    });
   }
 
 
@@ -196,4 +219,46 @@ export class DatabaseProvider {
       return [];
     });
   }
+
+
+  //Store DAO
+  addStore(store) {
+    return this.database.executeSql('INSERT INTO store (storeName, martId, storeAddress, latitude, longitude) VALUES(?,?,?,?,?)',
+      [store.storeName, store.martId, store.storeAddress, store.latitude, store.longitude]).then(data => {
+        return data;
+      }, err => {
+        console.log('Error: ', err);
+        return err;
+      });
+  }
+
+  removeStore(storeId) {
+    this.database.executeSql('DELETE FROM store WHERE storeId=?', [storeId]).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+    });
+  }
+
+  getStoresByMartId(martId){
+    let stores = [];
+    return this.database.executeSql("SELECT * FROM store WHERE martId = ?", [martId]).then((data) => {
+      if (data.rows.length > 0) {
+        for (var i = 0; i < data.rows.length; i++) {
+          stores.push({ storeId: data.rows.item(i).storeId,
+            storeName: data.rows.item(i).storeName,
+            martId: data.rows.item(i).martId,
+            storeAddress: data.rows.item(i).storeAddress,
+            latitude: data.rows.item(i).latitude,
+            longitude: data.rows.item(i).longitude
+          });
+        }
+      }
+      return stores;
+    }, err => {
+      console.log('Error: ', err);
+      return [];
+    });
+  }
+
 }
