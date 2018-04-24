@@ -46,7 +46,7 @@ export class ItemModalPage {
       if (!this.isNewItem(this.item)) {
         this.loadSelectedMartIds(this.item.itemId);
       }
-      //this.toast.show("Marts loaded susscefully " + this.marts.length, '5000', 'center').subscribe(toast =>{console.log(toast); });
+      //this.toast.show("Marts loaded susscefully " + this.marts.length, '2000', 'center').subscribe(toast =>{console.log(toast); });
     });
   }
 

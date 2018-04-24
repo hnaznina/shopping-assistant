@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS item(
     itemId INTEGER PRIMARY KEY AUTOINCREMENT,
     itemName TEXT NOT NULL,
     selectFlag INTEGER,
-    CONSTRAINT name_unique UNIQUE (itemName)
-    );
+    CONSTRAINT itemName_unique UNIQUE (itemName)
+);
 
 -- Initial data for item table
 INSERT INTO item (itemName,selectFlag) VALUES('Apple',0);
@@ -15,8 +15,8 @@ INSERT INTO item (itemName,selectFlag) VALUES('Pen',0);
 CREATE TABLE IF NOT EXISTS mart(
     martId INTEGER PRIMARY KEY AUTOINCREMENT,
     martName TEXT NOT NULL,
-    CONSTRAINT name_unique UNIQUE (martName)
-    );
+    CONSTRAINT martName_unique UNIQUE (martName)
+);
 
 -- Initial data for mart table
 INSERT INTO mart (martName) VALUES('Target');
@@ -31,6 +31,18 @@ INSERT INTO mart (martName) VALUES('Sams club');
 CREATE TABLE IF NOT EXISTS itemMart(
     martId INTEGER NOT NULL,
     itemId INTEGER NOT NULL,
-    FOREIGN KEY(martId) REFERENCES mart(martId),
-    FOREIGN KEY(itemId) REFERENCES item(itemId)
-    );
+    FOREIGN KEY(martId) REFERENCES mart(martId) ON DELETE CASCADE,
+    FOREIGN KEY(itemId) REFERENCES item(itemId) ON DELETE CASCADE
+);
+
+--Store Table
+CREATE TABLE IF NOT EXISTS store(
+    storeId INTEGER PRIMARY KEY AUTOINCREMENT,
+    storeName TEXT,
+    martId INTEGER,
+    storeAddress TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    FOREIGN KEY(martId) REFERENCES mart(martId) ON DELETE CASCADE,
+    CONSTRAINT martId_storeAddress_unique UNIQUE (martId, storeAddress) ON CONFLICT REPLACE
+);

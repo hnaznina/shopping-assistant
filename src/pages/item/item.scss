@@ -1,6 +1,6 @@
 page-item {
 
-}
+
 
 ion-input {
 	
@@ -17,9 +17,9 @@ ion-input {
 }
 
 #itemList{
-    margin-top: 4em;
+    margin-top: 2em;
 }
-#deleteButton{
+#deleteItemButton{
 background-color: red;
 color: white;
 border-radius: 17px;
@@ -29,7 +29,7 @@ width: 4em;
 font-size: 15px;
 margin-top: 4px;
 }
-#editButton{
+#editItemButton{
 background-color: lightgreen;
 color: black;
 border-radius: 17px;
@@ -38,11 +38,6 @@ width: 4em;
 font-size: 15px;
 margin-top: 4px;
 }
-
-.alert-head {
-    background-color: skyblue;
-    color: white;
-    height: 4em;
-  }
+}
   
   

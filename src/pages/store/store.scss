@@ -1,0 +1,43 @@
+page-store {
+    agm-map {
+        height: 500px;
+    }
+
+    #addStoreButton{
+        margin-bottom: 5em;
+    }
+
+    #deleteStoreButton{
+        background-color: red;
+        color: white;
+        border-radius: 17px;
+        margin-right: 5px;
+        height: 2.5em;
+        width: 4em;
+        font-size: 15px;
+        margin-top: 4px;
+        }
+        #editStoreButton{
+        background-color: lightgreen;
+        color: black;
+        border-radius: 17px;
+        height: 2.5em;
+        width: 4em;
+        font-size: 15px;
+        margin-top: 4px;
+        }
+        #storeName{
+           font-size: 18px;
+           color: orangered;
+           width:auto;
+           height:auto;
+        }
+
+        #storeAddress{
+            font-size: 18px;
+            color: navy;
+            margin-left: 20px;
+            
+        }
+
+}

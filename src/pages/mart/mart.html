@@ -5,44 +5,39 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>mart</ion-title>
+      <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+    <ion-title>Mart</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-    <ion-fab top left edge>
-        <ion-item id="inpbox">
-          <ion-input placeholder="Mart name e.g: Target" [(ngModel)]="mart.martName" clearInput></ion-input>
-        </ion-item>
-      </ion-fab>
-      <ion-fab top right edge>
-        <button ion-fab mini id="btn" (click)="addMart()">
-          <ion-icon name="add"></ion-icon>
+  <ion-fab bottom right edge>
+    <button ion-fab mini id="btn" (click)="presentMartAddOrEditPrompt(null, null)">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-list>
+      <ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+    <ion-item-sliding *ngFor="let mart of marts; let i = index">
+      <button ion-item (click)="openStorePage(mart.martId)">
+        {{mart.martName}}
+      </button>
+
+      <ion-item-options>
+        <button ion-button expandable (click)="removeMart(mart.martId)" id="deleteMartButton">
+          <b>Delete</b>
         </button>
-      </ion-fab>
+        <button ion-button expandable (click)="presentMartAddOrEditPrompt(mart.martId, mart.martName)" id="editMartButton">
+          <b>Edit</b>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-item-group>
 
-
-    <ion-list>
-      <ion-item-sliding *ngFor="let mart of marts; let i = index">
-    
-        <ion-item>
-          <ion-label>{{mart.martName}}</ion-label>
-        </ion-item>
-    
-        <!-- <ion-item-options>
-          <button ion-button expandable (click)="" id="deleteButton">
-            <b>Delete</b>
-          </button>
-          <button ion-button expandable (click)="" id="editButton">
-            <b>Edit</b>
-          </button>
-        </ion-item-options> -->
-
-      </ion-item-sliding>
-    </ion-list>
+  </ion-list>
 
 </ion-content>
